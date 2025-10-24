@@ -1,0 +1,17 @@
+# Activate MOLINFO functionalities
+MOLINFO STRUCTURE=start.pdb 
+# Compute the backbone dihedral angle phi, defined by atoms C-N-CA-C
+# you might want to use MOLINFO shortcuts
+phi: TORSION ATOMS=2394,2396,2398,2413 
+# Compute the backbone dihedral angle psi, defined by atoms N-CA-C-N
+# here also you might want to use MOLINFO shortcuts
+psi: TORSION ATOMS=2396,2398,2413,2415 
+# Activate well-tempered metadynamics in phi
+metad: METAD ARG=phi,psi ...
+   PACE=500 HEIGHT=1.2 
+   BIASFACTOR=8 
+   SIGMA=0.25,0.25 
+   FILE=HILLS GRID_MIN=-pi,-pi GRID_MAX=pi,pi 
+...
+# Print both collective variables on COLVAR file every 10 steps
+PRINT ARG=phi,psi FILE=COLVAR STRIDE=10 
